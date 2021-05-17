@@ -5,33 +5,24 @@
 #include "MotorDriverClass.h"
 #include "limitSwitchClass.h"
 
-struct motorData;
-{
-    uint8_t stepPin;
-    uint8_t dirPin; 
-    uint8_t enablePin;
-    uint16_t stepsPerRev; 
-    uint16_t minFrequency;
-    uint16_t maxFrequency;
-    uint16_t maxAngle;
-    uint16_t minAngle;
-};
+
 
 class axisClass
 {
     public:
-        axisClass(const motorData &data, uint8_t limitSwitchPin);
+        axisClass(uint8_t motorPins[3], uint16_t stepsPerRev, uint16_t frequencyRange[2], uint16_t angleRange[2], uint8_t limitSwitchPin);
         void initialize(void);
 
         void rotate(float deg, float time = NULL);
+        bool ready();
         void home(void); 
         void info(void);
 
     private:    
 
+    bool _homed = 0;     
     limitSwitch _limitSwitch;
     MotorDriver _motorDriver;
-    
 
 };
 
@@ -44,7 +35,6 @@ class axisClass
 //     uint16_t stepsPerRev = 200; 
 //     uint16_t minFrequency = 350;
 //     uint16_t maxFrequency = 2000;
-
 //     uint16_t maxAngle = 1080;
 //     uint16_t minAngle = 0;
 // };
