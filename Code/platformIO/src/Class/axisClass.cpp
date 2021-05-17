@@ -4,13 +4,15 @@
 #define CLOCKWISE 1 
 #define COUNTERCLOCKWISE 0 
 
-axisClass::axisClass(const motorData data, uint8_t limitSwitchPin):_motorDriver(data->stepPin, data->dirPin, data->enablePin), _limitSwitch(limitSwitchPin)
+axisClass::axisClass(uint8_t motorPins[3], uint16_t stepsPerRev, uint16_t frequencyRange[2], uint16_t angleRange[2], uint8_t limitSwitchPin)
+:_motorDriver(motorPins[0], motorPins[1], motorPins[2]), _limitSwitch(limitSwitchPin)
 {
-    _motorDriver.stepsPerRev = data->stepsPerRev;
-    _motorDriver.minFrequency = data->minFrequency;
-    _motorDriver.maxFrequency = data->maxFrequency; 
-    _motorDriver.maxAngle = data->maxAngle; 
-    _motorDriver.minAngle = data->minAngle; 
+    _motorDriver.stepsPerRev = stepsPerRev; 
+    _motorDriver.minFrequency = frequencyRange[0];
+    _motorDriver.maxFrequency = frequencyRange[1];
+    _motorDriver.minAngle = angleRange[0];
+    _motorDriver.maxAngle = angleRange[1];
+
 }
 
 void axisClass::initialize(void)
@@ -29,6 +31,11 @@ void axisClass::home(void)
     if(!_limitSwitch.isPressed())
         _motorDriver.continousRotation(COUNTERCLOCKWISE);
     
+}
+
+bool axisClass::ready(void)
+{
+    return _motorDriver.ready();
 }
 
 void axisClass::info(void)

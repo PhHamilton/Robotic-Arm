@@ -25,18 +25,21 @@ void MotorDriver::goTo(float deg, float time = NULL)
 {
     deg = _withinLimis(deg);
 
+    float relativeMovement = deg - _currentPosition; 
+    relativeMovement > 0 ? _direction(CLOCKWISE) : _direction(COUNTERCLOCKWISE);
+
+
     if(time == NULL)
     {  
         t_off = (uint16_t)(1000000/maxFrequency) - t_on;  
     }
     else
     {
-        //Do something
+
+        t_off = (uint16_t)(1000000*time*360/(abs(relativeMovement)*stepsPerRev)) -t_on;
     }
 
-    float relativeMovement = deg - _currentPosition; 
-    relativeMovement > 0 ? _direction(CLOCKWISE) : _direction(COUNTERCLOCKWISE);
-
+    
     rotateDegrees(relativeMovement);
 
     if(finished)
