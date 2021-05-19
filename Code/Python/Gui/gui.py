@@ -618,7 +618,7 @@ y0 = 650
 
 angle = 0
 angle2 = 0
-angle3 = 0
+angle3 = 30
 
 canvas = tk.Canvas(width=800, height=800, bg='black')
 
@@ -699,8 +699,8 @@ canvas.create_image(x0 -(l2+l3-l)*sin(angle) -l5*sin(angle2) -l4*sin(angle3),y0-
 
 # root.mainloop()
 #######################################################################################
-lastAngle_X = -(320-128)*sin(angle3)
-lastAnlge_Y = (320-128)*(1-cos(angle3))
+lastAngle_X = -(320-135)*sin(angle3) + 74*sin(angle3)
+lastAnlge_Y = (320-135)*(1-cos(angle3)) - 74*sin(angle3)
 ####################################################################################### 
 canvas.create_image(SolvesFirstAngle_X + SolvesSecondAngle_X + SolvesThirdAngle_X + lastAngle_X ,SolvesFirstAngle_Y + SolvesSecondAngle_Y+SolvesThirdAngle_Y-140+lastAnlge_Y, image=my_img5)
 
@@ -711,9 +711,9 @@ canvas.create_image(SolvesFirstAngle_X + SolvesSecondAngle_X + SolvesThirdAngle_
 # create_circle(x0, 250 + 342, 10, canvas)
 # create_circle(x0, 250 + 206, 10, canvas)
 # create_circle(x0, y0-254-120, 10, canvas)
-create_circle(x0, 250 + 70, 10, canvas)         # Y = 320 (Lower Circle)
-create_circle(x0, y0-254-120-148/2, 10, canvas) # Y = 202 (Middle Circle)
-create_circle(x0, y0-254-120-148, 10, canvas)   # Y = 128 (Upper Circle)
+create_circle(x0, 250 + 70+10, 10, canvas)         # Y = 320 (Lower Circle)
+create_circle(x0, y0-254-120 - 78 + 11, 10, canvas) # Y =, Y = 209 (Middle Circle)
+create_circle(x0, y0-254-120-148+10-3, 10, canvas)   # Y = 135 (Upper Circle)
 
 
 # 250+70 - (650 - 254 - 120 - 148) = 44
