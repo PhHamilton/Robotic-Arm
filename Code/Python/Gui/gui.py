@@ -718,8 +718,8 @@ class app():
         self.canvas = tk.Canvas(width = Width, height = Height, bg="black")
         self.canvas.pack()#(expand=tk.YES, fill=tk.BOTH)
 
-        self.x0 = 350
-        self.y0 = 675
+        self.x0 = 550
+        self.y0 = 680
 
         self.l1 = 60
         self.l2 = 60
@@ -820,9 +820,9 @@ class app():
 
 
 root = tk.Tk()
-root.geometry("800x800")
+root.geometry("1200x800")
 
-a = app(root, 800, 800, 1)
+a = app(root, 1200, 800, 1)
 a.updateImage(0,0,0)
 
 root.mainloop()
