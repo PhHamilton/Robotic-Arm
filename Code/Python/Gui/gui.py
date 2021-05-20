@@ -663,14 +663,14 @@ l3 = 136 #342-206 # 354-206
 l4 = 44 
 l5 = 136 #206-70
 
-l6 = 74
-l7 = 192
+l6 = 63
+l7 = 184
 
 
 Axis1_X = x0 -l*sin(angle)
 # Axis1_Y = y0-117 + l*(1-cos(angle))
 
-Axis1_Y = y0-117+ l*(1-cos(angle)) + 12
+Axis1_Y = y0-117+12 +l*(1-cos(angle))
 
 # SolvesFirstAngle_X = x0 -(l2+l3)*sin(angle)- l2*sin(angle2)+l*sin(angle) Works if anything breaks
 # SolvesFirstAngle_Y = y0-254-120 + (l2+l3)*(1-cos(angle)) + l2*(1-cos(angle2)) - l*(1-cos(angle))
@@ -690,7 +690,7 @@ SolvesThirdAngle_Y = l4*(1-cos(angle3))
 
 
 canvas.create_image(x0, y0, image=my_img)
-canvas.create_image(Axis1_X, Axis1_Y, image=my_img2)
+canvas.create_image(x0 -l*sin(angle), y0-117+12 +l*(1-cos(angle)), image=my_img2)
 canvas.create_image(x0 -(l2+l3-l)*sin(angle)-l2*sin(angle2), y0-254 + 12+ (l2+l3-l)*(1-cos(angle)) + l2*(1-cos(angle2)), image=my_img3)
 canvas.create_image(x0 -(l2+l3-l)*sin(angle) -l5*sin(angle2) -l4*sin(angle3),y0-254-120 + 12+(l2+l3-l)*(1-cos(angle)) + l5*(1-cos(angle2))+l4*(1-cos(angle3)), image=my_img4)
 
@@ -699,22 +699,29 @@ canvas.create_image(x0 -(l2+l3-l)*sin(angle) -l5*sin(angle2) -l4*sin(angle3),y0-
 
 # root.mainloop()
 #######################################################################################
-lastAngle_X = -(320-135)*sin(angle3) + 74*sin(angle3)
-lastAnlge_Y = (320-135)*(1-cos(angle3)) - 74*sin(angle3)
+lastAngle_X = -l7*sin(angle3) +(l7-l5)*sin(angle3)
+lastAnlge_Y = l7*(1-cos(angle3)) -l6*(1-cos(angle3))#-l6*(1-cos(angle3)) #-l6*(1-cos(angle3))
 ####################################################################################### 
 canvas.create_image(SolvesFirstAngle_X + SolvesSecondAngle_X + SolvesThirdAngle_X + lastAngle_X ,SolvesFirstAngle_Y + SolvesSecondAngle_Y+SolvesThirdAngle_Y-140+lastAnlge_Y, image=my_img5)
 
 
+create_circle(x0, y0-105 ,5, canvas) #545
+create_circle(x0, y0-242 ,5, canvas) #408
+create_circle(x0, y0-362 ,5, canvas) #288
+create_circle(x0, y0-504 ,5, canvas) #146
+
 
 # canvas.create_image(x0,1, image=my_img3)
 
-# create_circle(x0, 250 + 342, 10, canvas)
-# create_circle(x0, 250 + 206, 10, canvas)
-# create_circle(x0, y0-254-120, 10, canvas)
-create_circle(x0, 250 + 70+10, 10, canvas)         # Y = 320 (Lower Circle)
-create_circle(x0, y0-254-120 - 78 + 11, 10, canvas) # Y =, Y = 209 (Middle Circle)
-create_circle(x0, y0-254-120-148+10-3, 10, canvas)   # Y = 135 (Upper Circle)
+create_circle(x0, 250 + 342 + 12, 10, canvas)
+create_circle(x0, 250 + 206+12, 10, canvas)
+create_circle(x0, 250 + 70+10, 10, canvas)         
+create_circle(x0, y0-254-120 - 78 + 11, 10, canvas) 
 
+print("Circle 1: {}".format(250 + 342 + 12))
+print("Circle 2: {}".format(250 + 206+12))
+print("Circle 3: {}".format(250 + 70+10))
+print("Circle 4: {}".format(209))
 
 # 250+70 - (650 - 254 - 120 - 148) = 44
 
