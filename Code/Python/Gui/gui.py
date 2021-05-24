@@ -2,193 +2,39 @@ import tkinter as tk
 from tkinter import Canvas, DoubleVar, Scale, Widget, mainloop, ttk
 from tkinter.constants import ANCHOR
 
+from PIL import Image, ImageTk
+import time
+
 import math
 
 
 class gui():
     def __init__(self):
-        self.initGui()
-        self.create_Widgets()
-
-    def initGui(self):
-        self.root = tk.Tk()
-    
-        self.row0Height = 100
-        self.row1Height = 300
-        self.row2Height = 200
-        self.column0Width = 300
-        self.column1Width = 500
-
-        self.width = self.column0Width + self.column1Width
-        self.height = self.row0Height + self.row1Height + self.row2Height
-        self.padding = 5
-        self.root.geometry('{}x{}'.format(self.width, self.height+2*self.padding))
-        # self.root.resizable(False, False)
-        self.root.title("Robotic Arm GUI")
-
-    def create_Widgets(self):
-    
-        # # Frame 0 
-        # frame0 = ttk.LabelFrame(self.root, text='Pre-defined', height=self.row0Height, width=self.column0Width)
-        # frame0.grid(column=0, row=0, padx=self.padding, pady=self.padding, sticky="nesw")
-        
-        # homeButton = ttk.Button(frame0, text="Home")
-        # homeButton.grid(row=0,column=0)
-        # zeroButton = ttk.Button(frame0, text="Zero")
-        # zeroButton.grid(row=0,column=2)
-
-        
-        # Frame 1
-        frame1 = ttk.LabelFrame(self.root, text='Slider box', height=self.row1Height, width=self.column0Width)
-        frame1.grid(column=0, row=0, rowspan=2, padx=self.padding, pady=self.padding, sticky="nesw")
-
-        self.numberOfEntries = 0
-
-        # Axis 0
-        axis0Text = tk.Label(frame1, text="Axis 0", relief=tk.FLAT, padx=5,pady=5)
-        axis0Text.grid(row=0,column=0, sticky="w")
-
-        axis0Angle = tk.DoubleVar()
-        
-        axis0 = ttk.Scale(frame1, variable = axis0Angle, from_ = 0, to = 10, length = 250 ,orient = tk.HORIZONTAL)
-        axis0.grid(row=1,column=0,sticky="w")
-
-        axis0textBox = ttk.Entry(frame1, width = 3)
-        axis0textBox.grid(column=1, row=1, sticky = tk.W)
-        axis0textBox.insert(0,"0")
-        
-        # Axis 1
-        axis1Text = tk.Label(frame1, text="Axis 1", relief=tk.FLAT, padx=5,pady=5)
-        axis1Text.grid(row=2,column=0, sticky="w")
-
-        axis1Angle = tk.DoubleVar()
-        axis1 = ttk.Scale(frame1, variable = axis1Angle, from_ = 0, to = 10, length = 250 ,orient = tk.HORIZONTAL)
-        axis1.grid(row=3,column=0,sticky="w")
-
-        axis1textBox = ttk.Entry(frame1, width = 3)
-        axis1textBox.grid(column=1, row=3, sticky = tk.W)
-        axis1textBox.insert(0,"0")
-
-        # Axis 2
-        axis2Text = tk.Label(frame1, text="Axis 2", relief=tk.FLAT, padx=5,pady=5)
-        axis2Text.grid(row=4,column=0, sticky="w")
-
-        axis2Angle = tk.DoubleVar()
-        axis2 = ttk.Scale(frame1, variable = axis2Angle, from_ = 0, to = 10, length = 250 ,orient = tk.HORIZONTAL)
-        axis2.grid(row=5,column=0,sticky="w")
-
-        axis2textBox = ttk.Entry(frame1, width = 3)
-        axis2textBox.grid(column=1, row=5, sticky = tk.W)
-        axis2textBox.insert(0,"0")
-        
-        # Axis 3
-        axis3Text = tk.Label(frame1, text="Axis 3", relief=tk.FLAT, padx=5,pady=5)
-        axis3Text.grid(row=6,column=0, sticky="w")
-
-        axis3Angle = tk.DoubleVar()
-        axis3 = ttk.Scale(frame1, variable = axis3Angle, from_ = 0, to = 10, length = 250 ,orient = tk.HORIZONTAL)
-        axis3.grid(row=7,column=0,sticky="w")
-
-        axis3textBox = ttk.Entry(frame1, width = 3)
-        axis3textBox.grid(column=1, row=7, sticky = tk.W)
-        axis3textBox.insert(0,"0")
-
-        # Axis 4
-        axis4Text = tk.Label(frame1, text="Axis 4", relief=tk.FLAT, padx=5,pady=5)
-        axis4Text.grid(row=8,column=0, sticky="w")
-
-        axis4Angle = tk.DoubleVar()
-        axis4 = ttk.Scale(frame1, variable = axis4Angle, from_ = 0, to = 10, length = 250 ,orient = tk.HORIZONTAL)
-        axis4.grid(row=9,column=0,sticky="w")
-
-        axis4textBox = ttk.Entry(frame1, width = 3)
-        axis4textBox.grid(column=1, row=9, sticky = tk.W)
-        axis4textBox.insert(0,"0")
-
-        saveButton = ttk.Button(frame1, text ="Save")
-        saveButton.grid(row=10, column =0, sticky="w")
-
-        loadButton = ttk.Button(frame1, text ="Load")
-        loadButton.grid(row=10, column =0, sticky="e")
-
-        # Frame 2 
-
-        frame2 = ttk.LabelFrame(self.root, text='Stored Commands', height=self.row2Height- 4*self.padding, width=self.column0Width)
-        frame2.grid(column=0, row=2, padx=self.padding, pady=self.padding, sticky="nesw")
-
-        textBox = tk.Text(frame2, width = 41, height = 12)
-        textBox.grid(row=0, column = 0)
-
-        # Frame 5
-        frame3 = ttk.LabelFrame(self.root, text='Illustration', height=self.row0Height+self.row1Height, width=self.column0Width - 3*self.padding)
-        frame3.grid(column=1,row=0, rowspan=2,pady=self.padding,sticky="nesw")
-
-        # Frame 4
-        frame4 = ttk.LabelFrame(self.root, text='Console', height=self.row2Height - 4*self.padding, width=self.column1Width- 3*self.padding)
-        frame4.grid(column=1,row=2,pady=self.padding,sticky="nesw")
-
-        console = tk.Text(frame4, width = 68 , height = 12)
-        console.grid(row = 0, column=0)
-    
-        
-       
-
-        
-    
-
-        
-
-    def run(self):
-        self.root.mainloop()
-        
-class guiV2():
-    def __init__(self):
         self.numberOfEntries = 0
         self.position = 0
+        
         self.initGui()
         self.create_RobotMotion_Widget()
         self.create_StoredValues_Widget()
+        self.create_RobotMotionIllustration_Widget()
+
+
 
     def initGui(self):
         self.root = tk.Tk()
-    
         self.row0Height = 100
         self.row1Height = 300
         self.row2Height = 200
         self.column0Width = 300
         self.column1Width = 500
 
-        self.width = self.column0Width + self.column1Width
-        self.height = self.row0Height + self.row1Height + self.row2Height
+        self.width = 1280 #self.column0Width + self.column1Width
+        self.height = 720 #self.row0Height + self.row1Height + self.row2Height
         self.padding = 5
         self.root.geometry('{}x{}'.format(self.width, self.height+2*self.padding))
         # self.root.resizable(False, False)
         self.root.title("Robotic Arm GUI")
 
-    def createTabs(self):
-        s = ttk.Style()
-        s.configure('TNotebook', tabposition='nw')
-        tabControl = ttk.Notebook(self.root)
-  
-        tab1 = ttk.Frame(tabControl)
-        tab2 = ttk.Frame(tabControl)
-        
-        tabControl.add(tab1, text ='Tab 1')
-        tabControl.add(tab2, text ='Tab 2')
-        tabControl.pack(expand = 1, fill ="both")
-        
-        ttk.Label(tab1, 
-                text ="Welcome to \
-                GeeksForGeeks").grid(column = 0, 
-                                    row = 0,
-                                    padx = 30,
-                                    pady = 30)  
-        ttk.Label(tab2,
-                text ="Lets dive into the\
-                world of computers").grid(column = 0,
-                                            row = 0, 
-                                            padx = 30,
-                                            pady = 30)
 
     def create_RobotMotion_Widget(self):
         # Motion Frame
@@ -205,7 +51,11 @@ class guiV2():
         defaultButton = ttk.Button(AutoFrame, text="Default Position")
         defaultButton.grid(row=0,column=0, sticky="NESW")
 
+        pointForwardButton = ttk.Button(AutoFrame, text = "Point Forward")
+        pointForwardButton.grid(row=1, column=0, sticky ="nesw")
 
+        pointBackwardButton = ttk.Button(AutoFrame, text = "Point Backward")
+        pointBackwardButton.grid(row=2, column=0, sticky ="nesw")
         
 
         homeButton = ttk.Button(SemiAutoFrame, text="Home")
@@ -247,7 +97,7 @@ class guiV2():
         
 
         self.axis1Val = tk.DoubleVar()
-        self.axis1 = ttk.Scale(manualFrame, var = self.axis1Val, command = self.updateTextBox, from_=0, to=10,orient=tk.HORIZONTAL)
+        self.axis1 = ttk.Scale(manualFrame, var = self.axis1Val, command = self.updateTextBox, from_=-50, to=55,orient=tk.HORIZONTAL)
         self.axis1.grid(row=2,column=0, sticky="w")
 
         self.axis1textBox = ttk.Entry(manualFrame, width = 5)
@@ -256,7 +106,7 @@ class guiV2():
         self.axis1textBox.bind("<Return>", self.onReturn)
 
         self.axis2Val = tk.DoubleVar()
-        self.axis2 = ttk.Scale(manualFrame, var = self.axis2Val, command = self.updateTextBox, from_=0, to=10,orient=tk.HORIZONTAL)
+        self.axis2 = ttk.Scale(manualFrame, var = self.axis2Val, command = self.updateTextBox, from_=-50, to=55,orient=tk.HORIZONTAL)
         self.axis2.grid(row=3,column=0, sticky="w")
 
         self.axis2textBox = ttk.Entry(manualFrame, width = 5)
@@ -265,7 +115,7 @@ class guiV2():
         self.axis2textBox.bind("<Return>", self.onReturn)
 
         self.axis3Val = tk.DoubleVar()
-        self.axis3 = ttk.Scale(manualFrame, var = self.axis3Val, command = self.updateTextBox, from_=0, to=10,orient=tk.HORIZONTAL)
+        self.axis3 = ttk.Scale(manualFrame, var = self.axis3Val, command = self.updateTextBox, from_=-50, to=55,orient=tk.HORIZONTAL)
         self.axis3.grid(row=4,column=0, sticky="w")
 
         self.axis3textBox = ttk.Entry(manualFrame, width = 5)
@@ -330,6 +180,18 @@ class guiV2():
         loadButton = ttk.Button(saveLoadFrame, command = self.loadEntry, text="Load",width = 20)
         loadButton.grid(row=0, column=0)
 
+
+    def create_RobotMotionIllustration_Widget(self):
+        motionIllustration = ttk.LabelFrame(self.root, text = "Illustration", width = 600 + 2*self.padding, height =400 + 2*self.padding)
+        motionIllustration.grid(row = 0, column = 1, rowspan=2, padx= self.padding, pady = self.padding)
+
+        self.a = app(motionIllustration, 1200, 800, 1)
+        # canvas = tk.Canvas(motionIllustration, width = 600, height = 400, bg="black")
+        # canvas.grid(sticky="nesw")
+
+
+
+        
 
 
 
@@ -446,147 +308,15 @@ class guiV2():
         self.axis4textBox.delete(0, tk.END)
         self.axis4textBox.insert(0,str(int(self.axis4Val.get())))
 
+        self.a.updateImage(int(self.axis1Val.get()),int(self.axis2Val.get()),int(self.axis3Val.get()))
+
     def directionSelection(self):
         return self.radioChoice.get()    
 
     def run(self):
         self.root.mainloop()        
 
-class SliderTest():
-    def __init__(self):
-        self.init_Gui()
-    
-        self.run()
 
-    def init_Gui(self):
-        self.root = tk.Tk()
-        self.root.geometry("400x400")
-        
-
-        self.value = tk.DoubleVar()
-        self.slider = ttk.Scale(self.root, variable = self.value, command = self.updateTextBox, from_ = 0, to = 10, length = 100 ,orient = tk.HORIZONTAL)
-        
-        self.slider.grid(column = 0, row = 0)
-
-        self.textBox = ttk.Entry(self.root, width = 3)
-        self.textBox.grid(column=1, row=0, sticky = tk.W)
-        self.textBox.insert(0,"0")
-        self.numberOfEntries = 0
-        
-
-        self.updateButton = ttk.Button(self.root, command = self.updateValue, text="Update", width = 5)
-        self.updateButton.grid(column = 0, row=1)
-
-        self.saveButton = ttk.Button(self.root, command = self.saveValue, text="Save", width = 5)
-        self.saveButton.grid(column = 1, row = 1)
-
-        self.console = tk.Text(self.root, width = 30, height = 15)
-        # self.console.config(state = tk.DISABLED)
-        self.console.grid(column=0,row=3, columnspan=2)
-
-        self.position = 0
-        
-        self.upButton = ttk.Button(self.root, command = lambda:self.moveSelector(-1), text = "Up")
-        self.upButton.grid(row=4, column=0)
-        self.downButton = ttk.Button(self.root, command = lambda:self.moveSelector(1), text = "Down")
-        self.downButton.grid(row=4, column=1)
-
-        self.deleteButton = ttk.Button(self.root, command = self.removeEntry, text = "Delete")
-        self.deleteButton.grid(row=5,column=0)
-        self.loadButton = ttk.Button(self.root, command = self.loadEntry, text = "Load")
-        self.loadButton.grid(row=5, column=1)
-
-
-    def loadEntry(self):
-        value = tk.StringVar()
-        value = self.console.get('{}.{}'.format(self.position,0), '{}.{}{}'.format(self.position+1,0,"-1c"))
-        
-
-        self.value.set(int(value))
-        self.updateTextBox()
-        # self.value = DoubleVar(value)
-        # self.updateTextBox()
-        
-        
-
-    def removeEntry(self):
-        if(self.numberOfEntries > 0):
-            self.numberOfEntries -= 1
-            self.console.delete('{}.{}'.format(self.position,0), '{}.{}'.format(self.position+1,0))
-            self.moveSelector(-1)
-        if(self.numberOfEntries == 0):
-            self.console.tag_remove(tk.SEL, "0.0", "1.0") 
-            self.firstEntry = True
-            print(self.firstEntry)
-            
-            
-
-    def moveSelector(self, pos):
-        self.position = self.position + pos   
-    
-        if(self.position < 1):
-            self.position = 1
-        
-        if(self.position > self.numberOfEntries):
-            self.position = self.numberOfEntries 
-
-            
-
-        self.setSelector(self.position)  
-
-        
-        print(self.position, self.numberOfEntries)  
-        
-
-    def setSelector(self, pos):
-        self.console.tag_remove(tk.SEL, '{}.{}'.format(pos-1,0), '{}.{}'.format(pos,0))
-        self.console.tag_remove(tk.SEL, '{}.{}'.format(pos+1,0), '{}.{}'.format(pos+2,0))
-        self.console.tag_add(tk.SEL, '{}.{}'.format(pos,0), '{}.{}'.format(pos+1,0))
-        self.console.mark_set(tk.INSERT, '{}.{}'.format(pos,0))
-        self.console.see(tk.INSERT)
-        # self.console.tag_add(tk.SEL, "1.0", tk.END)
-        # self.console.mark_set(tk.INSERT, "1.0")
-        # self.console.see(tk.INSERT)
-        
-    def saveValue(self):
-        # self.console.config(state = tk.NORMAL)
-        # self.console.insert(tk.END, "{}{}".format(int(self.value.get()),"\n"))
-        self.console.insert("1.0", "{}{}".format(int(self.value.get()),"\n"))
-        self.numberOfEntries += 1
-        
-        self.moveSelector(1)
-
-        # self.console.config(state = tk.DISABLED)    
-
-    def updateValue(self):
-        
-
-        # 1 - Get the value from the textbox
-        # 2 - Set slider to that value
-        boxValue = tk.StringVar()
-        boxValue = self.textBox.get()
-
-        if not boxValue:
-            print("No valid value")
-
-        else:
-            self.slider.set(boxValue)
-
-    def updateTextBox(self, val = None):
-        
-        self.textBox.delete(0, tk.END)
-        self.textBox.insert(0,str(int(self.value.get())))
-
-    
-    def run(self):
-        self.root.mainloop()
-
-
-# a = guiV2()
-# a.run()
-
-from PIL import Image, ImageTk
-import time
 
 
 def create_circle(x, y, r, canvasName): #center coordinates, radius
@@ -606,7 +336,6 @@ def cos(deg):
     return math.cos(toRad(deg))        
 
 
-# a = SliderTest()
 # root = tk.Tk()
 # root.geometry("400x800")
 
@@ -715,8 +444,10 @@ def cos(deg):
 class app():
     def __init__(self, root, Width, Height, scale):
         self.scale = scale
-        self.canvas = tk.Canvas(width = Width, height = Height, bg="black")
-        self.canvas.pack()#(expand=tk.YES, fill=tk.BOTH)
+        self.canvas = tk.Canvas(root, width = Width, height = Height, bg="black")
+        self.canvas.grid()
+        # self.canvas.grid(row=0,column=0,sticky="nesw")
+        # self.canvas.pack()#(expand=tk.YES, fill=tk.BOTH)
 
         self.x0 = 550
         self.y0 = 680
@@ -819,10 +550,14 @@ class app():
 
 
 
-root = tk.Tk()
-root.geometry("1200x800")
+a = gui()
 
-a = app(root, 1200, 800, 1)
-a.updateImage(0,0,0)
+a.run()
 
-root.mainloop()
+# root = tk.Tk()
+# root.geometry("1200x800")
+
+# a = app(root, 1200, 800, 1)
+# a.updateImage(0,0,0)
+
+# root.mainloop()
