@@ -18,7 +18,7 @@ void MotorDriver::initialize(void)
     pinMode(_dirPin, OUTPUT);
     pinMode(_enablePin, OUTPUT);
     _direction(COUNTERCLOCKWISE);
-    _enableMotor(false);
+    enableMotor(false);
 }
 
 void MotorDriver::goTo(float deg, float time = NULL)
@@ -71,14 +71,14 @@ void MotorDriver::regularStep(uint16_t nSteps)
 {
     if(abs(_stepCounter) != nSteps)
     {
-        _enableMotor(true); 
+        enableMotor(true); 
         _step();
     }
     else
     {
         finished = 1; 
         _stepCounter = 0;
-        _enableMotor(false);
+        enableMotor(false);
     }
 }
 
@@ -122,9 +122,16 @@ bool MotorDriver::ready(void)
         return false;
 }
 
+void MotorDriver::setPositionToZero(void)
+{
+    _currentPosition = 0;
+    _stepCounter = 0;
+}
+
 void MotorDriver::continousRotation(bool deg)
 {
     deg > 0 ? _direction(CLOCKWISE) : _direction(COUNTERCLOCKWISE); 
+    enableMotor(true);
     _step();  
 }
 float MotorDriver::info(void)
@@ -213,7 +220,7 @@ uint16_t MotorDriver::_degToSteps(float deg)
     return (uint16_t)(stepsPerRev*((float)abs(deg)/360));
 }
 
-void MotorDriver::_enableMotor(bool state)
+void MotorDriver::enableMotor(bool state)
 {
     state == true ? digitalWrite(_enablePin, HIGH) : digitalWrite(_enablePin, LOW);
 }

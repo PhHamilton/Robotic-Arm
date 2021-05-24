@@ -12,17 +12,20 @@ class axisClass
     public:
         axisClass(uint8_t motorPins[3], uint16_t stepsPerRev, uint16_t frequencyRange[2], uint16_t angleRange[2], uint8_t limitSwitchPin);
         void initialize(void);
-
         void rotate(float deg, float time = NULL);
         bool ready();
-        void home(void); 
-        void info(void);
+        void home(void);
+        bool isHomed(void); 
+        float positionInfo(void);
+        bool limitSwitchInfo(void);
+
+        float limitSwitchOffset = 180; 
 
     private:    
 
-    bool _homed = 0;     
-    limitSwitch _limitSwitch;
-    MotorDriver _motorDriver;
+        bool _homed = 0;     
+        limitSwitch _limitSwitch;
+        MotorDriver _motorDriver;
 
 };
 

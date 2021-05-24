@@ -23,14 +23,29 @@ void axisClass::initialize(void)
 
 void axisClass::rotate(float deg, float time = NULL)
 {
-    _motorDriver.goTo(deg, time);
+    if(_homed)
+        _motorDriver.goTo(deg, time);
 }
+    
 
 void axisClass::home(void)
 {
-    if(!_limitSwitch.isPressed())
+    if(_limitSwitch.isPressed())
+    {
+        _homed = 1; 
+        _motorDriver.setPositionToZero();
+        _motorDriver.enableMotor(false);
+    }
+    else
+    {
+        _homed = 0;
         _motorDriver.continousRotation(COUNTERCLOCKWISE);
-    
+    }
+}
+
+bool axisClass::isHomed(void)
+{
+    return _homed; 
 }
 
 bool axisClass::ready(void)
@@ -38,12 +53,12 @@ bool axisClass::ready(void)
     return _motorDriver.ready();
 }
 
-void axisClass::info(void)
+float axisClass::positionInfo(void)
 {
-    Serial.print("Motor position");
-    Serial.print("\t");
-    Serial.println(_motorDriver.info()); 
-    Serial.print("Limitswitch status");
-    Serial.print("\t");
-    Serial.println(_limitSwitch.info());
+    return _motorDriver.info();    
+}
+
+bool axisClass::limitSwitchInfo(void)
+{
+    return _limitSwitch.info();
 }

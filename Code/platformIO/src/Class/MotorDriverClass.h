@@ -12,7 +12,9 @@ class MotorDriver
         void rotateDegrees(float deg); 
         void regularStep(uint16_t nSteps);
         void continousRotation(bool dir);
+        void setPositionToZero(void);
         float info(void);
+        void enableMotor(bool state); 
         bool ready(void);
         uint16_t t_on = 1; //us
         
@@ -50,8 +52,6 @@ class MotorDriver
 
 
     float _currentPosition = 0;
-
-    void _enableMotor(bool state); 
      
     void _direction(bool dir);
 
