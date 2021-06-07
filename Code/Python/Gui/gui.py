@@ -58,6 +58,27 @@ class gui():
         stretchButton = ttk.Button(AutoFrame, text="Stretch")
         stretchButton.grid(row=0,column=1, sticky="NESW")
 
+        # TimeBox
+        timeLabel = ttk.Label(manualFrame, text="Time [s]")
+        timeLabel.grid(row=6, column=0)
+        self.timeVal = DoubleVar()
+
+        self.time = ttk.Scale(manualFrame, var = self.timeVal, command = self.updateTextBox, from_=1, to=10, orient=tk.HORIZONTAL)
+        self.time.set(1)
+        self.time.grid(row= 7, column=0)
+        
+        self.timeBox = ttk.Entry(manualFrame, width = 5)
+        self.timeBox.grid(column=1, row=7, sticky = "W")
+        self.timeBox.insert(0, "1")
+        self.timeBox.bind("<Return>", self.onReturn)
+
+        saveButton = ttk.Button(manualFrame, command=self.saveValue, text="Save")
+        saveButton.grid(row=8,column=0)
+        clearButton = ttk.Button(manualFrame, command=self.clearTextBox, text="Clear")
+        clearButton.grid(row=9,column=0)
+
+        goButton = ttk.Button(manualFrame, text="Go", command = self.sendCommand, width = 2)
+        goButton.grid(row=8,column=1, rowspan=2, sticky="SN")
        
         # pointForwardButton = ttk.Button(AutoFrame, text = "Point Forward")
         # pointForwardButton.grid(row=1, column=0, sticky ="nesw")
@@ -69,13 +90,13 @@ class gui():
         homeButton = ttk.Button(SemiAutoFrame, text="Home")
         homeButton.grid(row=0,column=0, columnspan=2, sticky="NESW")
 
-        defaultButton = ttk.Button(SemiAutoFrame, text="Default Position")
+        defaultButton = ttk.Button(SemiAutoFrame, command =lambda:self.moveTo(self.axis0Val.get(),20,-54,-55,self.axis4Val.get(),self.timeVal.get()), text="Default Position")
         defaultButton.grid(row=1,column=0, columnspan=2, sticky="NESW")
 
-        pointForwardButton = ttk.Button(SemiAutoFrame, command =lambda:self.moveTo(self.axis0Val.get(),self.axis1Val.get(),-34,-55,self.axis4Val.get(),self.timeVal.get()),text = "Point Forward")
+        pointForwardButton = ttk.Button(SemiAutoFrame, command =lambda:self.moveTo(self.axis0Val.get(),0,-34,-55,self.axis4Val.get(),self.timeVal.get()),text = "Point Forward")
         pointForwardButton.grid(row=2, column=0, columnspan=2, sticky ="nesw")
 
-        pointBackwardButton = ttk.Button(SemiAutoFrame, command =lambda:self.moveTo(self.axis0Val.get(),self.axis1Val.get(),40,50,self.axis4Val.get(),self.timeVal.get()), text = "Point Backward")
+        pointBackwardButton = ttk.Button(SemiAutoFrame, command =lambda:self.moveTo(self.axis0Val.get(),0,40,50,self.axis4Val.get(),self.timeVal.get()), text = "Point Backward")
         pointBackwardButton.grid(row=3, column=0, columnspan=2, sticky ="nesw")
 
         rotateButton = ttk.Button(SemiAutoFrame, command =lambda:self.moveTo(45,self.axis1Val.get(),self.axis2Val.get(),self.axis3Val.get(),self.axis4Val.get(),self.timeVal.get()),  text="Rotate 45 degrees")
@@ -152,26 +173,7 @@ class gui():
         self.axis4textBox.insert(0,"0")
         self.axis4textBox.bind("<Return>", self.onReturn)
 
-        # TimeBox
-        time = ttk.Label(manualFrame, text="Time [s]")
-        time.grid(row=6, column=0)
-        self.timeVal = DoubleVar()
-        self.time = ttk.Scale(manualFrame, var = self.timeVal, command = self.updateTextBox, from_=1, to=10, orient=tk.HORIZONTAL)
-        self.time.set(1)
-        self.time.grid(row= 7, column=0)
-        self.timeBox = ttk.Entry(manualFrame, width = 5)
-        self.timeBox.insert(0, "1")
-        self.timeBox.bind("<Return>", self.onReturn)
-        self.timeBox.grid(column=1, row=7, sticky = "W")
-
-        saveButton = ttk.Button(manualFrame, command=self.saveValue, text="Save")
-        saveButton.grid(row=8,column=0)
-        clearButton = ttk.Button(manualFrame, command=self.clearTextBox, text="Clear")
-        clearButton.grid(row=9,column=0)
-
-        goButton = ttk.Button(manualFrame, text="Go", width = 2)
-        goButton.grid(row=8,column=1, rowspan=2, sticky="SN")
-
+        
     def create_StoredValues_Widget(self):
         StoredValueFrame = ttk.LabelFrame(self.root, text = "Stored Values")
         StoredValueFrame.grid(row=1, column=0, padx=4*self.padding, pady=self.padding, sticky="nesw")
@@ -180,7 +182,7 @@ class gui():
         textFrame.grid(row=0,column=0,padx = self.padding, sticky="nesw")
 
         self.saveValueBox= tk.Text(textFrame, width = 30, height = 10)
-        self.saveValueBox.grid(row=0, column = 0, sticky="nesw")
+        self.saveValueBox.grid(row=0, column = 0, columnspan=2, sticky="nesw")
 
         upDownFrame = ttk.LabelFrame(StoredValueFrame)
         upDownFrame.grid(row=0, column=1, padx=20, sticky="nesw")
@@ -201,15 +203,18 @@ class gui():
         clearAllButton = ttk.Button(upDownFrame, command = self.clearAllEntries, text="Clear All")
         clearAllButton.grid(row=5, column=0, sticky="S")
 
-        f = tk.Frame(relief='flat')
-        # lF = ttk.LabelFrame(root, labelwidget=f, borderwidth=4)
+
 
         saveLoadFrame = ttk.Frame(StoredValueFrame)
         saveLoadFrame.grid(row=1, column=0, padx=self.padding )#, sticky="nesw")
         
-        loadButton = ttk.Button(saveLoadFrame, command = self.loadEntry, text="Load",width = 20)
+        loadButton = ttk.Button(saveLoadFrame, command = self.loadEntry, text="Load")
         loadButton.grid(row=0, column=0)
 
+        self.loadAllFlag = tk.BooleanVar()
+        self.loadAllFlag.set(tk.FALSE)
+        loadAllButton = ttk.Button(saveLoadFrame, command = self.loadAllFlag.set(True), text ="Load all")
+        loadAllButton.grid(row=0, column = 1)
 
     def create_RobotMotionIllustration_Widget(self):
         # motionIllustration = ttk.LabelFrame(self.root, text = "Illustration", width = 600 + 2*self.padding, height =400 + 2*self.padding)
@@ -237,9 +242,12 @@ class gui():
         console = tk.Text(consoleFrame, width = 78, height = 14)
         console.grid(row=0,column=0, padx= self.padding, pady = self.padding)
 
-
-
     def moveTo(self, x0, x1, x2, x3, x4, time):
+        if(self.radioChoice.get() == 1):
+            self.axis0Val.set(x0)
+        else:
+            self.axis0Val.set(-x0)
+
         self.axis1Val.set(x1)
         self.axis2Val.set(x2)
         self.axis3Val.set(x3)
@@ -254,25 +262,8 @@ class gui():
     def loadEntry(self):
         if(self.numberOfEntries < 1):
             return
-        value = tk.StringVar()
-        value = self.saveValueBox.get('{}.{}'.format(self.position,0), '{}.{}{}'.format(self.position+1,0,"-1c"))
-        tempArray = tk.StringVar()
-        intArray = [0, 0, 0, 0, 0, 0]
-        counter = 0
-        for number in value: 
-            if number == "(":
-                continue
         
-            if number == "," or number == ")":
-                
-                intArray[counter] = int(tempArray.get())
-                
-                print(intArray)    
-                tempArray.set("")
-                counter = counter + 1 
-                continue
-            
-            tempArray.set(tempArray.get() + number)
+        intArray = self.getIntArray()
             
 
 
@@ -339,7 +330,9 @@ class gui():
         self.axis2.set(str(self.axis2Val.get()))
         self.axis3.set(str(self.axis3Val.get()))
         self.axis4.set(str(self.axis4Val.get()))
-        self.timeBox.set(str(self.timeVal.get()))
+        self.time.set(str(self.timeVal.get()))
+
+        
 
         self.updateTextBox()
 
@@ -388,18 +381,51 @@ class gui():
         self.axis4textBox.insert(0,str(int(self.axis4Val.get())))
 
         self.timeBox.delete(0, tk.END)
-        self.timeBox.insert(0,str(int(self.timeVal.get())))
-
-
+        self.timeBox.insert(0, str(int(self.timeVal.get())))
+        
         self.a.updateImage(int(self.axis1Val.get()),int(self.axis1Val.get()) + int(self.axis2Val.get()),int(self.axis1Val.get()) + int(self.axis2Val.get()) + int(self.axis3Val.get()))
         self.b.updateImage(int(self.axis0Val.get()))
         self.c.updateImage(int(self.axis4Val.get()))
         # int(self.axis1Val.get()) + int(self.axis2Val.get()) + int(self.axis3Val.get())
 
-
-
     def directionSelection(self):
-        return self.radioChoice.get()    
+        return self.radioChoice.get()  
+
+    def getIntArray(self):
+        value = tk.StringVar()
+        value = self.saveValueBox.get('{}.{}'.format(self.position,0), '{}.{}{}'.format(self.position+1,0,"-1c"))
+        tempArray = tk.StringVar()
+        intArray = [0, 0, 0, 0, 0, 0]
+        counter = 0
+        for number in value: 
+            if number == "(":
+                continue
+        
+            if number == "," or number == ")":
+                
+                intArray[counter] = int(tempArray.get())
+                
+                print(intArray)    
+                tempArray.set("")
+                counter = counter + 1 
+                continue
+            
+            tempArray.set(tempArray.get() + number)
+        return intArray          
+
+    def sendCommand(self): 
+        if self.loadAllFlag.get() == True:
+            pass
+            # Send multiple Commands: 
+            # counter = 0
+            # while(counter != self.numberOfEntries):
+                
+            #     counter = counter + 1
+            #     self.moveSelector(-1)
+            # self.loadAllFlag.set(False)
+            # self.moveSelector(self.numberOfEntries)
+        else:
+            pass
 
     def run(self):
         self.root.mainloop()        
